@@ -25,10 +25,9 @@ def get_ip_location():
             print(f"Регион: {region}")
             print(f"Город: {city}")
             print(f"Координаты: {coordinate_lat}, {coordinate_lon}")
+            return coordinate_lat, coordinate_lon
         else:
             print(f"Ошибка сервиса: {data.get('message', 'Неизвестный сбой')}")
         
     except Exception as e:
         print(f"Ошибка подключения: {e}")
-
-get_ip_location()
