@@ -37,11 +37,19 @@ def get_ip_location():
         print(f"Ошибка подключения: {e}")
 
 def packet_callback(packet):
-    sender_ip = packet[IP].src # ip отправителя
-    sender_mac = packet[Ether].src # MAC-адрес отправителя
-    recipient_ip =  packet[IP].dst # ip получателя
-    recipient_mac = packet[Ether].dst # MAC-адрес получателя
-    
-    print(f"{sender_ip} -> {recipient_ip} | {sender_mac} -> {recipient_mac}")
+    if IP in packet and Ether in packet:
+        sender_ip = packet[IP].src # ip отправителя
+        sender_mac = packet[Ether].src # MAC-адрес отправителя
+        recipient_ip =  packet[IP].dst # ip получателя
+        recipient_mac = packet[Ether].dst # MAC-адрес получателя
+        
+        print(f"{sender_ip} -> {recipient_ip} | {sender_mac} -> {recipient_mac}")
+    elif Ether in packet:
+        sender_mac = packet[Ether].src
+        recipient_mac = packet[Ether].dst
+        print(f"Нет IP слоя | {packet[Ether].src} -> {packet[Ether].dst}")
+    else:
+        print(f"Другое: {packet.summary()}")
+
 
 sniff(iface=INTERFACE, prn=packet_callback, store=0)
