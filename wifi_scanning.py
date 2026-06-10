@@ -1,4 +1,6 @@
 from scapy.all import *
+from scapy.layers.inet import IP
+from scapy.layers.l2 import Ether
 import requests
 
 INTERFACE = "wlo1"
@@ -35,6 +37,11 @@ def get_ip_location():
         print(f"Ошибка подключения: {e}")
 
 def packet_callback(packet):
-    print(f"Пакет получен: {packet.summary()}")
+    sender_ip = packet[IP].src # ip отправителя
+    sender_mac = packet[Ether].src # MAC-адрес отправителя
+    recipient_ip =  packet[IP].dst # ip получателя
+    recipient_mac = packet[Ether].dst # MAC-адрес получателя
+    
+    print(f"{sender_ip} -> {recipient_ip} | {sender_mac} -> {recipient_mac}")
 
 sniff(iface=INTERFACE, prn=packet_callback, store=0)
