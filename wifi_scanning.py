@@ -1,6 +1,8 @@
 from scapy.all import *
 import requests
 
+INTERFACE = "wlo1"
+
 # локальный IP адрес
 router_ip = conf.route.route("0.0.0.0")[2]
 print(f"IP-адрес роутера: {router_ip}")
@@ -31,3 +33,8 @@ def get_ip_location():
         
     except Exception as e:
         print(f"Ошибка подключения: {e}")
+
+def packet_callback(packet):
+    print(f"Пакет получен: {packet.summary()}")
+
+sniff(iface=INTERFACE, prn=packet_callback, store=0)
