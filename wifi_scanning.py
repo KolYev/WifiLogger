@@ -52,4 +52,4 @@ def packet_callback(packet):
         print(f"Другое: {packet.summary()}")
 
 
-sniff(iface=INTERFACE, prn=packet_callback, store=0)
+sniff(iface=INTERFACE, prn=packet_callback, store=0, count=100)
