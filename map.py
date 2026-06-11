@@ -18,10 +18,18 @@ def is_local_ip(ip):
             ip.startswith("224.") or
             ip == "0.0.0.0")
 
-coordinate_lat, coordinate_lon = get_ip_location()
-location = [coordinate_lat, coordinate_lon]
+location_data = get_ip_location()
 
-world_map = folium.Map(location=[coordinate_lat, coordinate_lon], zoom_start=12)
+if location_data:
+    coordinate_lat, coordinate_lon = location_data
+    print("Ваши координаты успешно определены.")
+else:
+    print("Предупреждение: Не удалось получить ваши координаты. Используются дефолтные.")
+    coordinate_lat, coordinate_lon = 55.7558, 37.6173 
+
+location = [coordinate_lat, coordinate_lon]
+world_map = folium.Map(location=location, zoom_start=12)
+
 folium.Marker(
     location = location,
     popup = "You",
@@ -40,4 +48,5 @@ os.chdir(os.path.dirname(os.path.abspath('world_map.html')))
 
 with socketserver.TCPServer(("", PORT), http.server.SimpleHTTPRequestHandler) as httpd:
     webbrowser.open(f'http://localhost:{PORT}/world_map.html')
+    print(f'http://localhost:{PORT}/world_map.html')
     httpd.serve_forever()

@@ -12,9 +12,10 @@ print(f"IP-адрес роутера: {router_ip}")
 # внешний IP адрес
 def get_ip_location(ip_address=None):
     try:
-        url = "http://ip-api.com"
+        url = "http://ip-api.com/json" 
         if ip_address:
             url += ip_address
+        
         response = requests.get(url)
         data = response.json()
 
@@ -34,9 +35,11 @@ def get_ip_location(ip_address=None):
             return coordinate_lat, coordinate_lon
         else:
             print(f"Ошибка сервиса: {data.get('message', 'Неизвестный сбой')}")
-        
+            return None
+
     except Exception as e:
         print(f"Ошибка подключения: {e}")
+        return None
 
 packet_data = []
 
