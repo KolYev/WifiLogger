@@ -5,6 +5,18 @@ import webbrowser
 import os
 from wifi_scanning import *
 
+# проверка на локальный IP
+def is_local_ip(ip):
+    if not ip:
+        return True
+    
+    return (ip.startswith("192.168.") or 
+            ip.startswith("10.") or 
+            ip.startswith("172.16.") or
+            ip.startswith("127.") or 
+            ip.startswith("169.254.") or
+            ip.startswith("224.") or
+            ip == "0.0.0.0")
 
 coordinate_lat, coordinate_lon = get_ip_location()
 location = [coordinate_lat, coordinate_lon]
