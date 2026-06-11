@@ -10,9 +10,11 @@ router_ip = conf.route.route("0.0.0.0")[2]
 print(f"IP-адрес роутера: {router_ip}")
 
 # внешний IP адрес
-def get_ip_location():
+def get_ip_location(ip_address=None):
     try:
-        url = "http://ip-api.com/json/"
+        url = "http://ip-api.com"
+        if ip_address:
+            url += ip_address
         response = requests.get(url)
         data = response.json()
 

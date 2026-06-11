@@ -3,7 +3,7 @@ import http.server
 import socketserver
 import webbrowser
 import os
-from wifi_scanning import get_ip_location
+from wifi_scanning import *
 
 
 coordinate_lat, coordinate_lon = get_ip_location()
@@ -12,8 +12,15 @@ location = [coordinate_lat, coordinate_lon]
 world_map = folium.Map(location=[coordinate_lat, coordinate_lon], zoom_start=12)
 folium.Marker(
     location = location,
-    popup = "Location",
+    popup = "You",
 ).add_to(world_map)
+
+# for i in range(0, len(packet_data)):
+#     location = get_ip_location
+#     folium.Marker(
+#         location=
+#     )
+
 world_map.save("world_map.html")
 
 PORT = 8000
