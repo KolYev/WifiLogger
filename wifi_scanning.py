@@ -36,20 +36,40 @@ def get_ip_location():
     except Exception as e:
         print(f"Ошибка подключения: {e}")
 
+packet_data = []
+
 def packet_callback(packet):
+    packet_info = {}
+
     if IP in packet and Ether in packet:
-        sender_ip = packet[IP].src # ip отправителя
-        sender_mac = packet[Ether].src # MAC-адрес отправителя
-        recipient_ip =  packet[IP].dst # ip получателя
-        recipient_mac = packet[Ether].dst # MAC-адрес получателя
+        packet_info = {
+            "type": "IP",
+            "sender_ip": packet[IP].src, # ip отправителя
+            "sender_mac": packet[Ether].src, # MAC-адрес отправителя
+            "recipient_ip" :  packet[IP].dst, # ip получателя
+            "recipient_mac" : packet[Ether].dst # MAC-адрес получателя
+        }
         
-        print(f"{sender_ip} -> {recipient_ip} | {sender_mac} -> {recipient_mac}")
+        print(f"{packet_info['sender_ip']} -> {packet_info['recipient_ip']} | {packet_info['sender_mac']} -> {packet_info['recipient_mac']}")
+    
     elif Ether in packet:
-        sender_mac = packet[Ether].src
-        recipient_mac = packet[Ether].dst
-        print(f"Нет IP слоя | {packet[Ether].src} -> {packet[Ether].dst}")
+        packet_info = {
+            "type": "Ethernet",
+            "sender_mac" : packet[Ether].src,
+            "recipient_mac" : packet[Ether].dst
+        }
+        
+        print(f"{packet_info['sender_mac']} -> {packet_info['recipient_mac']}")
     else:
-        print(f"Другое: {packet.summary()}")
+        packet_info = {
+            "type": "Other",
+            "summary": packet.summary()
+        }
+        print(f"Другое: {packet_info['summary']}")
+
+    packet_data.append(packet_info)
 
 
 sniff(iface=INTERFACE, prn=packet_callback, store=0, count=100)
+
+print(f"Сохранено пакетов: {len(packet_data)}")
